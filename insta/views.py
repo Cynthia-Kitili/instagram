@@ -52,4 +52,17 @@ def timeline(request):
 	comment = Comment.objects.order_by('-time_comment')
 	
 
-	return render(request, 'my-inst/timeline.html',{"Myprofile":Myprofile,"comment":comment})        
+	return render(request, 'my-inst/timeline.html',{"Myprofile":Myprofile,"comment":comment})    
+
+@login_required(login_url='/accounts/login/')
+def single_pic(request,pic_id):
+	pic = pic.objects.get(id= pic_id)
+
+	return render(request, 'my-inst/single_pic.html',{"pic":pic})
+
+@login_required(login_url='/accounts/login/')
+def like(request,pic_id):
+	Pic = Pic.objects.get(id=pic_id)
+	like +=1
+	save_like()
+	return redirect(timeline)        
