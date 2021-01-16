@@ -14,3 +14,10 @@ class ProfileUploadForm(forms.ModelForm):
 		model = Profile
 		
 		exclude = ['user']    
+
+
+class CommentForm(forms.ModelForm):
+	class Meta:
+		model = Comment
+		
+		exclude = ['user','pic',]        
