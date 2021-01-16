@@ -60,4 +60,17 @@ class Comment(models.Model):
 		self.delete()
 
 	def save_comment(self):
-		self.save()           
+		self.save()    
+
+class Follow(models.Model):
+	user = models.ForeignKey(Profile,null=True)
+	follower = models.ForeignKey(User,null=True)
+
+	def __int__(self):
+		return self.name
+
+	def save_follower(self):
+		self.save()
+
+	def delete_follower(self):
+		self.save()               
