@@ -95,3 +95,10 @@ class Follow(models.Model):
 
 	def delete_follower(self):
 		self.save()               
+
+class Unfollow(models.Model):
+	user = models.ForeignKey(Profile,null=True)
+	follower = models.ForeignKey(User,null=True)
+
+	def __int__(self):
+		return self.name        
