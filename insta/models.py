@@ -25,4 +25,24 @@ class Pic(models.Model):
 
     def update_caption(self,new_caption):
     	self.pic_caption = new_caption
-    	self.save()    
+    	self.save()   
+
+    @classmethod
+    def get_pics_by_user(cls,id):
+        sent_pics = Pic.objects.filter(user_id=id)
+        return sent_pics
+
+    @classmethod
+    def get_pics_by_id(cls,id):
+        fetched_pic = Pic.objects.get(id = id)
+        return  fetched_pic
+
+    class Meta:
+    	ordering = ['-pub_date']
+
+
+    def __str__(self):
+    	return self.user.username
+
+    def save_profile(self):
+    	self.save()     
