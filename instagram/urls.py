@@ -18,4 +18,6 @@ from django.conf.urls import url
 
 urlpatterns = [
     url('admin/', admin.site.urls),
+    url(r'',include('insta.urls'))
+
 ]
