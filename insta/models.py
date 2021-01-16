@@ -45,4 +45,19 @@ class Pic(models.Model):
     	return self.user.username
 
     def save_profile(self):
-    	self.save()     
+    	self.save()  
+
+class Comment(models.Model):
+	user = models.ForeignKey(User, null= True)
+	pic = models.ForeignKey(Pic, null= True,related_name='comment')
+	comment= models.TextField( blank=True)
+	
+	def __str__(self):
+		return self.comment
+
+
+	def delete_comment(self):
+		self.delete()
+
+	def save_comment(self):
+		self.save()           
