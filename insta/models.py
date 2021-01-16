@@ -101,4 +101,17 @@ class Unfollow(models.Model):
 	follower = models.ForeignKey(User,null=True)
 
 	def __int__(self):
-		return self.name        
+		return self.name      
+
+class Likes(models.Model):
+	user = models.ForeignKey(Profile,null=True)
+	# pic = models.ForeignKey(Pic,null=True)
+
+	def __int__(self):
+		return self.name
+
+	def unlike(self):
+		self.delete()
+
+	def save_like(self):
+		self.save() 
