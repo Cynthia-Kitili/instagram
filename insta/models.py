@@ -47,6 +47,27 @@ class Pic(models.Model):
     def save_profile(self):
     	self.save()  
 
+class Profile(models.Model):
+	username = models.CharField(default='User',max_length=30)
+	profile_pic = models.ImageField(upload_to = "profile/",null=True)
+	bio = models.TextField(default='',blank = True)
+	first_name = models.CharField(max_length =30)
+	last_name = models.CharField(max_length =30)
+
+	def __str__(self):
+		return self.username
+
+	def delete_profile(self):
+		self.delete()
+
+	def save_profile(self):
+		self.save()
+
+	@classmethod
+	def search_profile(cls,search_term):
+		got_profiles = cls.objects.filter(first_name__icontains = search_term)
+		return got_profiles
+
 class Comment(models.Model):
 	user = models.ForeignKey(User, null= True)
 	pic = models.ForeignKey(Pic, null= True,related_name='comment')
