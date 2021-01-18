@@ -4,6 +4,8 @@ from . forms import ProfileUploadForm,CommentForm,ProfileForm
 from django.http  import HttpResponse
 from . models import Pic ,Profile, Likes, Follow, Comment,Unfollow
 from django.conf import settings
+from .email import send_welcome_email
+
 
 
 # Create your views here.
@@ -132,4 +134,6 @@ def send(request):
             return redirect( timeline)
     else:
         form = ImageForm() 
-    return render(request, 'my-inst/send.html',{"form" : form})           
+    return render(request, 'my-inst/send.html',{"form" : form})     
+    
+          
