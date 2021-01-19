@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'g6n^xgsxqzx-2%__@m)p51&yj68v&r4y-d1$byj-rowf%!^#mr'
+SECRET_KEY = 'g6n^xgsxqzx-2%__@m)p51&yj68v&r4y-d1$byj-rowf%!^#mr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'insta',
-    'bootstrap3',
+    'bootstrap',
     'tinymce',
+    'cloudinary',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -156,7 +157,6 @@ USE_TZ = True
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -166,6 +166,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # configuring the location for media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
