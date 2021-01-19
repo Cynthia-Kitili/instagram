@@ -1,3 +1,0 @@
-Hello {{name}}
-
-Welcome to the Instagram. You will find the most exciting stories.

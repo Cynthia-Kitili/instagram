@@ -1,6 +1,6 @@
 {%extends 'base.html'%}
 {% block content%}
-<h1 class="text-center"></h1>
+<h1 class="text-center">welcome to iClone</h1>
 <div class="container-fluid">
 	<div class="row">
 		{% if user.is_authenticated %}
@@ -22,7 +22,7 @@
 				  <div class="panel-title">
 				       <div class="hovereffect" style="height: 245px">
 				     	<a href="{% url 'single' image.id %}">
-				        	<img class="img-responsive" src="{{image.image.url}}" style= "width: 100%; height: 120%;" alt="">
+				        	<img class="img-responsive" src="{{image.image.url}}" alt="">
 				      	</a>
 				      					      
 				   </div>
@@ -31,14 +31,9 @@
 				   <div class="panel-body" style="padding-top: 20px">
 				   	<p style="padding-top:30px"></p>
 					   	<a class='info' href="{% url 'likePost' image.id %}">
-					   		{%if image.likes.id == user.id%}
-			      		 	<i class="fas fa-heart" style="font-size:25px;" class="success"></i>
-			      		 	{%else%}
 			      		 	<i class="far fa-heart" style="font-size:25px;" class="success"></i>
-			      		 	{%endif%}
-					   		
 
-			      		</a><span style="font-size:25px;">Likes: {{image.likes.count}}</span>
+			      		</a><span style="font-size:25px;">{{image.likes.count}}</span>
 
 			      		 <a class='info' href="{% url 'single' image.id %}">
 			      		 	 {%if is_liked%}
@@ -48,9 +43,9 @@
 				      		 {%endif%}
 
 			      		</a>
-			      		<span style="font-size:25px;">Comments {{image.comment }}</span>
+			      		<span style="font-size:25px;">{{image.comment }}</span>
 			      		<p></p>
-			      		<h4><strong>Caption</strong>: {{image.image_caption}}</h4>
+			      		<p><strong>{{image.profile.username}}</strong>: {{image.image_caption}}</p>
 			      		
 		   		
 				   </div>
@@ -62,10 +57,10 @@
 				</div>
 				{%endfor%}
 			{%else%}
-			<h3 class="text-center">You havent posted any images yet. <a href="{% url 'create' %}">here</a></h3>
+			<h3 class="text-center">Discover new users <a href="{% url 'index' %}">here</a></h3>
 			{%endif%}
 		{%else%}
-		 <h3 class="text-center">Log in to view this content</h3>	
+		 <h3 class="text-center">Log in to view content</h3>	
 		{%endif%}
 	</div>
 </div>

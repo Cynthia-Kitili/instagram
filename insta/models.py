@@ -1,117 +1,74 @@
 from django.db import models
+import datetime as dt
 from django.contrib.auth.models import User
-from tinymce.models import HTMLField
 
 # Create your models here.
-class Pic(models.Model):
-    pic = models.ImageField(upload_to = "pics/",null = True)
-    user = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
-    pic_name = models.CharField(max_length = 30,null = True)
-    likes = models.IntegerField(default=0)
-    pic_caption = models.TextField(null = True)
-    pub_date = models.DateTimeField(auto_now_add=True,null=True)
-    # profile = models.ForeignKey(Profile, null=True) 
-    comments = models.IntegerField(default=0)
-
-
-    def __str__(self):
-    	return self.pic_name
-
-    def delete_pic(self):
-    	self.delete()
-
-    def save_pic(self):
-    	self.save()
-
-    def update_caption(self,new_caption):
-    	self.pic_caption = new_caption
-    	self.save()   
-
-    @classmethod
-    def get_pics_by_user(cls,id):
-        sent_pics = Pic.objects.filter(user_id=id)
-        return sent_pics
-
-    @classmethod
-    def get_pics_by_id(cls,id):
-        fetched_pic = Pic.objects.get(id = id)
-        return  fetched_pic
-
-    class Meta:
-    	ordering = ['-pub_date']
-
-
-    def __str__(self):
-    	return self.user.username
-
-    def save_profile(self):
-    	self.save()  
-
 class Profile(models.Model):
-	username = models.CharField(default='User',max_length=30)
-	profile_pic = models.ImageField(upload_to = "profile/",null=True)
-	bio = models.TextField(default='',blank = True)
-	first_name = models.CharField(max_length =30)
-	last_name = models.CharField(max_length =30)
+	bio = models.CharField(max_length = 300,blank = True,default = 'Type Bio:')
+	profile_pic = models.ImageField(upload_to = 'profile/', blank = True,default = '../static/images/default.png')
+	user = models.ForeignKey(User, on_delete = models.CASCADE)
+	
 
 	def __str__(self):
-		return self.username
+		return self.user
 
-	def delete_profile(self):
-		self.delete()
+class Image(models.Model):
+	
+	image_name = models.CharField(max_length = 60, blank = True)
+	image_caption = models.CharField(max_length = 60, blank = True)
+	created_at = models.DateTimeField(auto_now_add = True)
+	profile = models.ForeignKey(User)
+	user_profile = models.ForeignKey(Profile)
+	likes = models.ManyToManyField(User,related_name = 'likes', blank = True)
+	image = models.ImageField(upload_to = 'images/', blank = True)
 
-	def save_profile(self):
+	@classmethod
+	def save_image(self):
 		self.save()
 
 	@classmethod
-	def search_profile(cls,search_term):
-		got_profiles = cls.objects.filter(first_name__icontains = search_term)
-		return got_profiles
+	def delete_image(self):
+		self.delete()
+
+	@classmethod
+	def update_caption(cls,id,caption):
+		updated_caption = cls.objects.filter(pk = id).update(image_caption = caption)
+		return updated_location	
+
+	@classmethod
+	def get_image_by_id(cls,image_id):
+		image = cls.objects.get(id = image_id)
+		return image
+	def total_likes(self):
+		self.likes.count()
+
+	def __str__(self):
+		return self.image_name
 
 class Comment(models.Model):
-	user = models.ForeignKey(User, null= True,on_delete=models.CASCADE)
-	pic = models.ForeignKey(Pic, null= True,related_name='comment', on_delete=models.CASCADE)
-	comment= models.TextField( blank=True)
-	
+	comment = models.CharField(max_length = 1000)
+	created_at = models.DateTimeField(auto_now_add = True)
+	image = models.ForeignKey(Image)
+	profile = models.ForeignKey(User)
+
 	def __str__(self):
-		return self.comment
+		return self.profile
 
-
-	def delete_comment(self):
-		self.delete()
-
-	def save_comment(self):
-		self.save()    
+#Add the following field to User dynamically
+def get_first_name(self):
+    return self.first_name
 
 class Follow(models.Model):
-	user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-	follower = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
+    user_from = models.ForeignKey(User,related_name='rel_from_set')
+    user_to = models.ForeignKey(User, related_name='rel_to_set')
+  
+    def __str__(self):
+        return '{} follows {}'.format(self.user_from, self.user_to)
 
-	def __int__(self):
-		return self.name
 
-	def save_follower(self):
-		self.save()
-
-	def delete_follower(self):
-		self.save()               
-
-class Unfollow(models.Model):
-	user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-	follower = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
-
-	def __int__(self):
-		return self.name      
-
-class Likes(models.Model):
-	user = models.ForeignKey(Profile,null=True, on_delete=models.CASCADE)
-	# pic = models.ForeignKey(Pic,null=True)
-
-	def __int__(self):
-		return self.name
-
-	def unlike(self):
-		self.delete()
-
-	def save_like(self):
-		self.save() 
+# Add following field to User dynamically
+User.add_to_class('following',
+                  models.ManyToManyField('self',
+                                         through=Follow,
+                                         related_name='followers',
+                                         symmetrical=False))
