@@ -1,6 +1,9 @@
 from django.db import models
 import datetime as dt
 from django.contrib.auth.models import User
+import django.db.models.options as options
+
+options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('schema',)
 
 # Create your models here.
 class Profile(models.Model):
@@ -11,6 +14,10 @@ class Profile(models.Model):
 
 	def __str__(self):
 		return self.user
+
+	class Meta:
+		ordering = ['user']	
+		
 
 class Image(models.Model):
 	
@@ -44,6 +51,9 @@ class Image(models.Model):
 
 	def __str__(self):
 		return self.image_name
+	class Meta:
+    		ordering=['image_name']
+	
 
 class Comment(models.Model):
 	comment = models.CharField(max_length = 1000)
@@ -53,6 +63,9 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.profile
+
+	class Meta:
+    		ordering=['profile']		
 
 #Add the following field to User dynamically
 def get_first_name(self):
@@ -64,7 +77,8 @@ class Follow(models.Model):
   
     def __str__(self):
         return '{} follows {}'.format(self.user_from, self.user_to)
-
+    class Meta:
+    		ordering=['user_to','user_from']	
 
 # Add following field to User dynamically
 User.add_to_class('following',
@@ -72,3 +86,5 @@ User.add_to_class('following',
                                          through=Follow,
                                          related_name='followers',
                                          symmetrical=False))
+
+									 
