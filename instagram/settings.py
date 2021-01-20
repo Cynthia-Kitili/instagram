@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'insta',
-    'bootstrap',
+    'bootstrap3',
     'tinymce',
     'cloudinary',
     'django.contrib.admin',
